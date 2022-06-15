@@ -1,0 +1,13 @@
+<mvc:View controllerName="workflowtaskuimodule.controller.MyTaskUI_DSDemo02" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m">
+    <App id="app">
+        <pages>
+            <Page showHeader="false" showFooter="false">
+                <content>
+                    <Input value="{context>/GAMECLASS}" id="__input0"/>
+                    <Input value="{context>/GAMENAME}" id="__input1"/>
+
+                </content>
+            </Page>
+        </pages>
+    </App>
+</mvc:View>

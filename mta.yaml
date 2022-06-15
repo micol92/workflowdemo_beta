@@ -1,0 +1,118 @@
+_schema-version: "3.2"
+ID: dswfdemo02
+version: 0.0.1
+modules:
+- name: wfmodule02
+  type: com.sap.application.content
+  path: wfmodule02
+  requires:
+  - name: workflow
+    parameters:
+      content-target: true
+- name: dswfdemo02-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: dswfdemo02-destination-service
+    parameters:
+      content-target: true
+  - name: dswfdemo02_html_repo_host
+    parameters:
+      service-key:
+        name: dswfdemo02_html_repo_host-key
+  - name: uaa_dswfdemo02
+    parameters:
+      service-key:
+        name: uaa_dswfdemo02-key
+  parameters:
+    content:
+      subaccount:
+        destinations:
+        - Name: dsapprouter02_dswfdemo02_html_repo_host
+          ServiceInstanceName: dswfdemo02-html5-app-host-service
+          ServiceKeyName: dswfdemo02_html_repo_host-key
+          sap.cloud.service: dsapprouter02
+        - Authentication: OAuth2UserTokenExchange
+          Name: dsapprouter02_uaa_dswfdemo02
+          ServiceInstanceName: dswfdemo02-xsuaa-service
+          ServiceKeyName: uaa_dswfdemo02-key
+          sap.cloud.service: dsapprouter02
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: dswfdemo02-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: dswfdemo02_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - workflowtaskuimodule.zip
+      name: workflowtaskuimodule
+      target-path: resources/
+    - artifacts:
+      - taskui2.zip
+      name: taskui2
+      target-path: resources/
+- name: workflowtaskuimodule
+  type: html5
+  path: workflow-taskui-module
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: taskui2
+  type: html5
+  path: taskui2
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: workflow
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: workflow
+    service-plan: standard
+- name: dswfdemo02-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        subaccount:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: dswfdemo02-destination-service
+    service-plan: lite
+- name: dswfdemo02_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: dswfdemo02-html5-app-host-service
+    service-plan: app-host
+- name: uaa_dswfdemo02
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: dswfdemo02-xsuaa-service
+    service-plan: application
+parameters:
+  deploy_mode: html5-repo

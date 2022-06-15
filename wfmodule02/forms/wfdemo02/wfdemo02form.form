@@ -1,0 +1,82 @@
+{
+    "id": "wfdemo02form",
+    "schemaVersion": "1.1.0",
+    "name": "wfdemo02form",
+    "revision": "1.0",
+    "type": "task",
+    "readOnly": false,
+    "content": [
+        {
+            "id": "smdate",
+            "type": "string",
+            "label": "SMDATE",
+            "readOnly": false,
+            "value": "${context.itemGroup.SMDATE}",
+            "constraints": {
+                "required": false
+            }
+        },
+        {
+            "id": "sqnum",
+            "type": "integer",
+            "label": "SQNUM",
+            "readOnly": false,
+            "value": "${context.itemGroup.SQNUM}",
+            "constraints": {
+                "required": false
+            }
+        },
+        {
+            "id": "smgmname",
+            "type": "string",
+            "label": "SMGMNAME",
+            "readOnly": false,
+            "value": "${context.itemGroup.SMGMNAME}",
+            "constraints": {
+                "required": false
+            }
+        },
+        {
+            "id": "smgmcom",
+            "type": "string",
+            "label": "SMGMCOM",
+            "readOnly": false,
+            "value": "${context.itemGroup.SMGMCOM}",
+            "constraints": {
+                "required": false
+            }
+        },
+        {
+            "id": "smrate",
+            "type": "string",
+            "label": "SMRATE",
+            "readOnly": false,
+            "value": "${context.itemGroup.SMRATE}",
+            "constraints": {
+                "required": false
+            }
+        },
+        {
+            "id": "smrankdiff",
+            "type": "string",
+            "label": "SMRANKDIFF",
+            "readOnly": false,
+            "value": "${context.itemGroup.SMRANKDIFF}",
+            "constraints": {
+                "required": false
+            }
+        }
+    ],
+    "decisions": [
+        {
+            "id": "approve",
+            "text": "Approve",
+            "decisionType": "positive"
+        },
+        {
+            "id": "decline",
+            "text": "Decline",
+            "decisionType": "negative"
+        }
+    ]
+}
