@@ -25,6 +25,10 @@ server:
         port: 35729
         path: webapp
         delay: 300
+        backend:
+        - path: /CAP_Dest
+          url: https://krworkzonepoc-core-smcap01-srv.cfapps.ap11.hana.ondemand.com
+          destination: smgate_api
     - name: fiori-tools-proxy
       afterMiddleware: compression
       configuration:

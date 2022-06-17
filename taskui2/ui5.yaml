@@ -18,6 +18,9 @@ server:
         backend:
           - path: /sap
             url: http://localhost
+          - path: /CAP_Dest
+            url: https://krworkzonepoc-core-smcap01-srv.cfapps.ap11.hana.ondemand.com
+            destination: smgate_api            
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:
