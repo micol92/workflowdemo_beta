@@ -22,45 +22,55 @@ sap.ui.define([
                   ];
                   //debugger;
 
-                  //console.log(bizData);
-                  if(!this.getView().getModel("newEduBiz2")){ this.getView().setModel(new JSONModel({}), "newEduBiz2"); }
-                  //debugger;
+                //console.log(bizData);
+                if(!this.getView().getModel("newEduBiz2")){ this.getView().setModel(new JSONModel({}), "newEduBiz2"); }
+                //debugger;
                 
-                  this.getView().getModel("newEduBiz2").setData(bizData);
-                  //debugger;               
-                //this.getView().getModel("newEduBiz2").setData(bizData);                  
+                this.getView().getModel("newEduBiz2").setData(bizData);
+
+                var appId = this.getOwnerComponent().getManifestEntry("/sap.app/id");
+                var appPath = appId.replaceAll(".", "/");
+                var appModulePath = jQuery.sap.getModulePath(appPath);                
+                debugger;
                 $.ajax({
-                    url: "/taskui2/CAP_Dest/catalog-service2/SMGAMEINFO?$format=json",
-                    //url: "https://krworkzonepoc-core-smcap01-srv.cfapps.ap11.hana.ondemand.com/catalog-service2/SMGAMEINFO?$format=json",
+                    url:  appModulePath + "/CAP_Dest/catalog-service2/SMGAMEINFO?$format=json",
                     headers: {
                         "Content-Type": "application/json;charset=utf-8"
                     },
                     success: function(data, headers){
                         debugger;
-                        //var nData = that._getTextByKey(data.value);
-                        if(that.getView().getModel("newEduBiz3")){
-                            //that.getView().getModel("bizModel").setData(nData); 
-                            that.getView().getModel("newEduBiz3").setData(data.value); 
+                        if(this.getView().getModel("newEduBiz3")){
+                            this.getView().getModel("newEduBiz3").setData(data.value); 
                         }else{
-                            //that.getView().setModel(new JSONModel(nData), "bizModel");
-                            that.getView().setModel(new JSONModel(data.value), "newEduBiz3");
+                            //that.getView().setModel(new JSONModel(data.value), "newEduBiz3");
+                            this.getView().setModel(new JSONModel({}), "newEduBiz3");
+                            this.getView().getModel("newEduBiz3").setData(data.value);
+
                         }
                     },
                     error: function(error){
                         debugger;
                         MessageBox.error("EduBizMain.controller.error");
                     }
-                        //console.log("success");
-                        //console.log(data);
-
-                        //that.getView().getModel("context").setData("aaaa");
-                        //var supplierData2 = data.responseJSON.value;
-                        //var existingData2 = that.getView().getModel("");
-                        //existingData2.oData.SMTOPGAME = {};
-                        //existingData2.oData.SMTOPGAME = supplierData2;
-                        //that.getView().setModel(existingData2);
                 });            
-    
+
+
+                // Gathering workflow task-instances 
+                $.ajax({
+                    //url:  appModulePath + "/bpmworkflowruntime/workflow-service/rest/v1/task-instances",
+                    url:  appModulePath + "/bpmworkflowruntime/v1/workflow-instances?startedBy=jungwoo.han@sap.com",
+                    headers: {
+                        "Content-Type": "application/json;charset=utf-8"
+                    },
+                    success: function (data, headers) {
+                        var content = data;
+                        debugger; 
+                    },
+                    error: function(error){
+                        debugger;
+                        MessageBox.error("Workflow execution error !!!");
+                    }
+                });                
             }
         });
     });
